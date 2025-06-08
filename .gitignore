@@ -2,4 +2,48 @@
 *.txt
 
 # Ignore text files in all directories
-**/*.txt 
+**/*.txt
+
+# .NET
+bin/
+obj/
+.vs/
+*.user
+*.suo
+*.cache
+*.dll
+*.exe
+*.pdb
+*.log
+*.vspscc
+*.vssscc
+.vscode/
+_ReSharper*/
+*.ReSharper*
+*.DotSettings.user
+project.lock.json
+artifacts/
+PublishProfiles/
+*.pubxml
+*.publishsettings
+*.nupkg
+TestResults/
+
+# React
+node_modules/
+dist/
+build/
+coverage/
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# IDE
+.idea/
+*.swp
+*.swo 
