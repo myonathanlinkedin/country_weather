@@ -2,6 +2,7 @@ using System.Text.Json;
 using WeatherApp.Application.Interfaces;
 using WeatherApp.Domain.ValueObjects;
 using WeatherApp.Infrastructure.Configuration;
+using WeatherApp.Infrastructure.Models.OpenWeatherMap;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 
@@ -12,7 +13,7 @@ namespace WeatherApp.Infrastructure.Services
         private readonly HttpClient _httpClient;
         private readonly ILogger<OpenWeatherMapService> _logger;
         private readonly string _apiKey;
-        private readonly string _apiBaseUrl = "https://api.openweathermap.org/data/2.5/weather";
+        private readonly string _apiBaseUrl;
 
         public OpenWeatherMapService(
             HttpClient httpClient,
@@ -22,19 +23,26 @@ namespace WeatherApp.Infrastructure.Services
             _httpClient = httpClient;
             _logger = logger;
             _apiKey = settings.Value.ApiKey;
+            _apiBaseUrl = settings.Value.ApiUrl;
         }
 
         public async Task<WeatherData> GetWeatherForCityAsync(string cityName)
         {
             try
             {
-                var url = $"{_apiBaseUrl}?q={cityName}&appid={_apiKey}&units=imperial";
+                var request = new OpenWeatherMapRequestDto
+                {
+                    CityName = cityName,
+                    Units = "imperial"
+                };
+
+                var url = $"{_apiBaseUrl}?q={request.CityName}&appid={_apiKey}&units={request.Units}";
                 var response = await _httpClient.GetAsync(url);
                 
                 response.EnsureSuccessStatusCode();
                 
                 var content = await response.Content.ReadAsStringAsync();
-                var weatherResponse = JsonSerializer.Deserialize<OpenWeatherMapResponse>(content, 
+                var weatherResponse = JsonSerializer.Deserialize<OpenWeatherMapResponseDto>(content, 
                     new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
 
                 if (weatherResponse == null)
@@ -51,7 +59,7 @@ namespace WeatherApp.Infrastructure.Services
             }
         }
 
-        private WeatherData MapToWeatherData(OpenWeatherMapResponse response, string cityName)
+        private WeatherData MapToWeatherData(OpenWeatherMapResponseDto response, string cityName)
         {
             var main = response.Main;
             var wind = response.Wind;
@@ -94,40 +102,6 @@ namespace WeatherApp.Infrastructure.Services
             // Convert back to Fahrenheit
             double dewPointF = (dewPointC * 9 / 5) + 32;
             return Math.Round(dewPointF, 1);
-        }
-    }
-
-    // Response classes for JSON deserialization
-    public class OpenWeatherMapResponse
-    {
-        public MainData? Main { get; set; }
-        public WindData? Wind { get; set; }
-        public List<WeatherData>? Weather { get; set; }
-        public int Visibility { get; set; }
-        public SysData? Sys { get; set; }
-
-        public class MainData
-        {
-            public double Temp { get; set; }
-            public double Humidity { get; set; }
-            public double Pressure { get; set; }
-        }
-
-        public class WindData
-        {
-            public double Speed { get; set; }
-            public double Deg { get; set; }
-        }
-
-        public class WeatherData
-        {
-            public string Main { get; set; } = string.Empty;
-            public string Description { get; set; } = string.Empty;
-        }
-
-        public class SysData
-        {
-            public string Country { get; set; } = string.Empty;
         }
     }
 } 
