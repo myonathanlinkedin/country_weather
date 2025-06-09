@@ -40,7 +40,7 @@ namespace WeatherApp.Tests.Controllers
             // Assert
             var okResult = Assert.IsType<OkObjectResult>(result.Result);
             var returnValue = Assert.IsAssignableFrom<IEnumerable<CountryDto>>(okResult.Value);
-            Assert.Equal(5, returnValue.Count());
+            Assert.Equal(6, returnValue.Count());
             Assert.Contains(returnValue, c => c.Name == "United States" && c.Code == "US");
             Assert.Contains(returnValue, c => c.Name == "United Kingdom" && c.Code == "UK");
         }

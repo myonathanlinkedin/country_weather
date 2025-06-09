@@ -97,7 +97,7 @@ namespace WeatherApp.Tests.Services
             var service = new OpenWeatherMapService(httpClient, mockSettings.Object, mockLogger.Object);
 
             // Act & Assert
-            await Assert.ThrowsAsync<HttpRequestException>(() => service.GetWeatherForCityAsync("NonExistentCity"));
+            await Assert.ThrowsAsync<CityNotFoundException>(() => service.GetWeatherForCityAsync("NonExistentCity"));
         }
 
         [Theory]

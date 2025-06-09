@@ -215,9 +215,17 @@ The tests cover:
 - **Missing Weather Data**: Verify that the OpenWeatherMap API key is valid and correctly set in appsettings.json
 - **City Not Found**: Some city names might not match exactly what OpenWeatherMap expects. Try searching for a major city
 
-## Copyright
+### 📜 License - Apache License 2.0 (TL;DR)
 
-© 2025 Weather Application by M. Yonathan
+This project follows the **Apache License 2.0**, which means:
+
+- ✅ **You can** use, modify, and distribute the code freely.  
+- ✅ **You must** include the original license when distributing.  
+- ✅ **You must** include the `NOTICE` file if one is provided.  
+- ✅ **You can** use this in personal & commercial projects.  
+- ✅ **No warranties** – use at your own risk! 🚀  
+
+For full details, check the [Apache License 2.0](http://www.apache.org/licenses/LICENSE-2.0).  
 
 ## Screenshots 
 
