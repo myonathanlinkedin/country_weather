@@ -218,3 +218,7 @@ The tests cover:
 ## Copyright
 
 © 2025 Weather Application by M. Yonathan
+
+## Screenshots 
+
+![image](https://github.com/user-attachments/assets/6e254ff5-5301-4457-b231-db7dbe932d10)
