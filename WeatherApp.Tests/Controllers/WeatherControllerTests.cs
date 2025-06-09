@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
 using Moq;
 using WeatherApp.Api.Controllers;
 using WeatherApp.Application.Contracts;
@@ -11,12 +12,14 @@ namespace WeatherApp.Tests.Controllers
     public class WeatherControllerTests
     {
         private readonly Mock<IWeatherService> _mockWeatherService;
+        private readonly Mock<ILogger<WeatherController>> _mockLogger;
         private readonly WeatherController _controller;
 
         public WeatherControllerTests()
         {
             _mockWeatherService = new Mock<IWeatherService>();
-            _controller = new WeatherController(_mockWeatherService.Object);
+            _mockLogger = new Mock<ILogger<WeatherController>>();
+            _controller = new WeatherController(_mockWeatherService.Object, _mockLogger.Object);
         }
 
         [Fact]
