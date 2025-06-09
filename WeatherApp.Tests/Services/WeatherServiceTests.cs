@@ -37,7 +37,10 @@ namespace WeatherApp.Tests.Services
             var mockSettings = new Mock<IOptions<OpenWeatherMapSettings>>();
             mockSettings
                 .Setup(x => x.Value)
-                .Returns(new OpenWeatherMapSettings { ApiKey = "test-api-key" });
+                .Returns(new OpenWeatherMapSettings { 
+                    ApiKey = "test-api-key",
+                    ApiUrl = "https://api.openweathermap.org/data/2.5/weather" 
+                });
             
             var mockLogger = new Mock<ILogger<OpenWeatherMapService>>();
             
@@ -84,7 +87,10 @@ namespace WeatherApp.Tests.Services
             var mockSettings = new Mock<IOptions<OpenWeatherMapSettings>>();
             mockSettings
                 .Setup(x => x.Value)
-                .Returns(new OpenWeatherMapSettings { ApiKey = "test-api-key" });
+                .Returns(new OpenWeatherMapSettings { 
+                    ApiKey = "test-api-key",
+                    ApiUrl = "https://api.openweathermap.org/data/2.5/weather" 
+                });
             
             var mockLogger = new Mock<ILogger<OpenWeatherMapService>>();
             
