@@ -39,6 +39,12 @@ namespace WeatherApp.Infrastructure.Services
                 var url = $"{_apiBaseUrl}?q={request.CityName}&appid={_apiKey}&units={request.Units}";
                 var response = await _httpClient.GetAsync(url);
                 
+                if (response.StatusCode == System.Net.HttpStatusCode.NotFound)
+                {
+                    _logger.LogWarning("City not found: {CityName}", cityName);
+                    throw new CityNotFoundException($"Weather data for city '{cityName}' not found.");
+                }
+                
                 response.EnsureSuccessStatusCode();
                 
                 var content = await response.Content.ReadAsStringAsync();
@@ -52,10 +58,14 @@ namespace WeatherApp.Infrastructure.Services
 
                 return MapToWeatherData(weatherResponse, cityName);
             }
+            catch (CityNotFoundException)
+            {
+                throw;
+            }
             catch (Exception ex)
             {
                 _logger.LogError(ex, "Error fetching weather data for {CityName}", cityName);
-                throw;
+                throw new WeatherServiceException($"An error occurred while fetching weather data for '{cityName}'.", ex);
             }
         }
 
@@ -103,5 +113,16 @@ namespace WeatherApp.Infrastructure.Services
             double dewPointF = (dewPointC * 9 / 5) + 32;
             return Math.Round(dewPointF, 1);
         }
+    }
+
+    public class CityNotFoundException : Exception 
+    {
+        public CityNotFoundException(string message) : base(message) { }
+    }
+
+    public class WeatherServiceException : Exception
+    {
+        public WeatherServiceException(string message, Exception innerException) 
+            : base(message, innerException) { }
     }
 } 

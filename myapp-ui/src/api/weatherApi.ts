@@ -1,21 +1,46 @@
 import axios from 'axios';
 import type { City, Country, Weather } from '../types';
+import config from '../config';
 
-const API_URL = 'https://localhost:7274/api';
+// Configure axios defaults
+const api = axios.create({
+  baseURL: config.apiUrl,
+  headers: {
+    'Content-Type': 'application/json',
+    'Accept': 'application/json'
+  }
+});
 
 export const weatherApi = {
   getCountries: async (): Promise<Country[]> => {
-    const response = await axios.get<Country[]>(`${API_URL}/countries`);
-    return response.data;
+    console.log(`API call: GET ${config.apiUrl}/countries`);
+    try {
+      const response = await api.get<Country[]>('/countries');
+      console.log('Countries API response:', response);
+      return response.data;
+    } catch (error) {
+      console.error('Countries API error:', error);
+      throw error;
+    }
   },
   
   getCities: async (countryCode: string): Promise<City[]> => {
-    const response = await axios.get<City[]>(`${API_URL}/countries/${countryCode}/cities`);
-    return response.data;
+    try {
+      const response = await api.get<City[]>(`/countries/${countryCode}/cities`);
+      return response.data;
+    } catch (error) {
+      console.error(`Cities API error for country ${countryCode}:`, error);
+      throw error;
+    }
   },
   
   getWeather: async (cityName: string): Promise<Weather> => {
-    const response = await axios.get<Weather>(`${API_URL}/weather/${cityName}`);
-    return response.data;
+    try {
+      const response = await api.get<Weather>(`/weather/${cityName}`);
+      return response.data;
+    } catch (error) {
+      console.error(`Weather API error for city ${cityName}:`, error);
+      throw error;
+    }
   }
 }; 

@@ -11,25 +11,61 @@ This application allows users to:
 
 The weather data is retrieved from the OpenWeatherMap API, while country and city data is stored in an in-memory database.
 
-## Project Structure
+## Complete Project Structure
 
-### Backend (.NET 9)
+### Backend Structure (.NET 9)
 
-The backend follows a clean architecture with Domain-Driven Design principles:
+```
+country_weather/
+├── WeatherApp.Api/                    # API entry point
+│   ├── Controllers/                   # API controllers
+│   ├── DTOs/                          # Data Transfer Objects
+│   ├── Program.cs                     # Application startup
+│   ├── appsettings.json               # Configuration
+│   └── Dockerfile                     # Container definition
+│
+├── WeatherApp.Application/            # Application layer
+│   ├── Contracts/                     # DTOs and transfer objects
+│   ├── Interfaces/                    # Service interfaces
+│   └── Exceptions/                    # Custom exceptions
+│
+├── WeatherApp.Domain/                 # Domain layer
+│   └── Entities/                      # Domain entities
+│
+├── WeatherApp.Infrastructure/         # Infrastructure layer
+│   ├── Configuration/                 # External API configuration
+│   ├── Data/                          # Database context
+│   │   └── AppDbContext.cs            # EF Core context
+│   ├── Repositories/                  # Data access implementation
+│   └── Services/                      # External service integration
+│
+└── WeatherApp.Tests/                  # Unit & integration tests
+    ├── Controllers/                   # Controller tests
+    └── Services/                      # Service tests
+```
 
-- **WeatherApp.Api**: Entry point with controllers and API endpoints
-- **WeatherApp.Application**: Business logic, interfaces, and DTOs
-- **WeatherApp.Domain**: Core entities and value objects
-- **WeatherApp.Infrastructure**: Repository implementations and API integrations
-- **WeatherApp.Tests**: Unit tests for services, temperature conversion, and controllers
+### Frontend Structure (React + TypeScript)
 
-### Frontend (React + TypeScript)
-
-The frontend is built using React with TypeScript, organized as:
-
-- **components/**: UI components for country selection, city selection, and weather display
-- **api/**: API client for communicating with the backend
-- **types/**: TypeScript interfaces matching backend DTOs
+```
+myapp-ui/
+├── public/                            # Static assets
+├── src/
+│   ├── api/                           # API client
+│   │   └── weatherApi.ts              # Backend API integration
+│   ├── components/                    # UI components
+│   │   ├── CountrySelector.tsx        # Country dropdown
+│   │   ├── CitySelector.tsx           # City dropdown
+│   │   ├── WeatherDisplay.tsx         # Weather information display
+│   │   └── SearchBar.tsx              # Direct city search
+│   ├── config/                        # Configuration
+│   │   └── index.ts                   # Environment settings
+│   ├── types/                         # TypeScript types
+│   │   └── index.ts                   # Interface definitions
+│   ├── App.tsx                        # Main component
+│   └── main.tsx                       # Application entry point
+├── package.json                       # Dependencies & scripts
+└── tsconfig.json                      # TypeScript configuration
+```
 
 ## Database and External APIs
 
@@ -42,43 +78,107 @@ The frontend is built using React with TypeScript, organized as:
 - Japan (JP)
 - Australia (AU)
 - Germany (DE)
+- Indonesia (ID)
 
-Each country has 5 major cities.
+Each country has multiple major cities. Indonesia specifically includes 10 major cities/provinces.
 
-## How to Run
+## Complete Guide to Run the Application
 
-### Backend
+### Prerequisites
 
-1. Navigate to the project root
-2. Update the OpenWeatherMap API key in `WeatherApp.Api/appsettings.json`
-3. Build the solution:
+- [.NET 9 SDK](https://dotnet.microsoft.com/download)
+- [Node.js](https://nodejs.org/) (v18+ recommended)
+- [npm](https://www.npmjs.com/) (v8+ recommended)
+
+### Backend Setup
+
+1. Clone the repository:
+   ```bash
+   git clone https://github.com/your-username/country_weather.git
+   cd country_weather
    ```
+
+2. Update the OpenWeatherMap API key in `WeatherApp.Api/appsettings.json`:
+   ```json
+   {
+     "OpenWeatherMap": {
+       "ApiKey": "b8ebf0e8c123cec78eed69a900786867",
+       "ApiUrl": "https://api.openweathermap.org/data/2.5"
+     }
+   }
+   ```
+
+3. Build the solution:
+   ```bash
    dotnet build
    ```
+
 4. Run the API:
-   ```
+   ```bash
    cd WeatherApp.Api
    dotnet run
    ```
    
-The API will be available at https://localhost:7274 and http://localhost:5274
+5. Verify the API is running:
+   - API endpoints will be available at https://localhost:7274 and http://localhost:5274
+   - You can test the API via Swagger UI at https://localhost:7274/swagger
 
-### Frontend
+### Frontend Setup
 
 1. Navigate to the frontend directory:
-   ```
+   ```bash
    cd myapp-ui
    ```
+
 2. Install dependencies:
-   ```
+   ```bash
    npm install
    ```
-3. Start the development server:
-   ```
+
+3. Configure environment (optional):
+   - Create a `.env` file in the `myapp-ui` directory if you need to customize the API URL:
+     ```
+     VITE_API_URL=http://localhost:5274
+     ```
+
+4. Start the development server:
+   ```bash
    npm run dev
    ```
    
-The frontend will be available at http://localhost:5173
+5. Access the application:
+   - The frontend will be available at http://localhost:5173 (or another port if 5173 is in use)
+   - You should see the Weather App interface with country and city dropdowns
+
+### Running in Production Mode
+
+#### Backend:
+
+```bash
+cd WeatherApp.Api
+dotnet publish -c Release
+```
+
+The published files will be in `WeatherApp.Api/bin/Release/net9.0/publish/`
+
+#### Frontend:
+
+```bash
+cd myapp-ui
+npm run build
+```
+
+The built files will be in the `myapp-ui/dist/` directory, which can be served with any static file server.
+
+### Docker Support
+
+The application includes a Dockerfile for containerizing the API:
+
+```bash
+cd WeatherApp.Api
+docker build -t weather-app-api .
+docker run -p 8080:80 weather-app-api
+```
 
 ## API Endpoints
 
@@ -90,7 +190,7 @@ The frontend will be available at http://localhost:5173
 
 To run the unit tests:
 
-```
+```bash
 cd WeatherApp.Tests
 dotnet test
 ```
@@ -109,10 +209,12 @@ The tests cover:
 5. **CORS Configuration**: Set up to allow the React frontend to communicate with the API
 6. **Type Safety**: TypeScript interfaces match C# DTOs for end-to-end type safety
 
-## Future Enhancements
+## Troubleshooting
 
-- Persistence layer with Entity Framework Core and SQL Server
-- Weather data caching to reduce API calls
-- User authentication and favorites
-- Geolocation for automatic city detection
-- Historical weather data and forecasts 
+- **API Connection Issues**: Ensure CORS is properly configured in the API and that the frontend is pointing to the correct API URL
+- **Missing Weather Data**: Verify that the OpenWeatherMap API key is valid and correctly set in appsettings.json
+- **City Not Found**: Some city names might not match exactly what OpenWeatherMap expects. Try searching for a major city
+
+## Copyright
+
+© 2025 Weather Application by M. Yonathan

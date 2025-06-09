@@ -25,12 +25,12 @@ builder.Services.AddScoped<IWeatherService, OpenWeatherMapService>();
 // Add HttpClient for OpenWeatherMap API integration
 builder.Services.AddHttpClient<OpenWeatherMapService>();
 
-// Add CORS for React frontend
+// Add CORS - Allow all origins
 builder.Services.AddCors(options =>
 {
-    options.AddPolicy("AllowReactApp",
+    options.AddPolicy("AllowAll",
         policy => policy
-            .WithOrigins("http://localhost:5173") // Default Vite dev server port
+            .AllowAnyOrigin()
             .AllowAnyMethod()
             .AllowAnyHeader()
     );
@@ -42,6 +42,13 @@ builder.Services.AddSwaggerGen();
 
 var app = builder.Build();
 
+// Initialize and seed the database
+using (var scope = app.Services.CreateScope())
+{
+    var context = scope.ServiceProvider.GetRequiredService<AppDbContext>();
+    context.Database.EnsureCreated();
+}
+
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
@@ -51,8 +58,8 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 
-// Use CORS
-app.UseCors("AllowReactApp");
+// Use CORS - before routing
+app.UseCors("AllowAll");
 
 app.UseAuthorization();
 

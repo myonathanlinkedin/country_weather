@@ -6,6 +6,7 @@ COPY ["WeatherApp.Api/WeatherApp.Api.csproj", "WeatherApp.Api/"]
 COPY ["WeatherApp.Application/WeatherApp.Application.csproj", "WeatherApp.Application/"]
 COPY ["WeatherApp.Domain/WeatherApp.Domain.csproj", "WeatherApp.Domain/"]
 COPY ["WeatherApp.Infrastructure/WeatherApp.Infrastructure.csproj", "WeatherApp.Infrastructure/"]
+COPY ["WeatherApp.Tests/WeatherApp.Tests.csproj", "WeatherApp.Tests/"]
 COPY ["WeatherApp.sln", "./"]
 
 # Restore dependencies

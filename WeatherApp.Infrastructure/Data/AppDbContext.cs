@@ -33,7 +33,8 @@ namespace WeatherApp.Infrastructure.Data
                 new Country { Id = 2, Name = "United Kingdom", Code = "UK" },
                 new Country { Id = 3, Name = "Japan", Code = "JP" },
                 new Country { Id = 4, Name = "Australia", Code = "AU" },
-                new Country { Id = 5, Name = "Germany", Code = "DE" }
+                new Country { Id = 5, Name = "Germany", Code = "DE" },
+                new Country { Id = 6, Name = "Indonesia", Code = "ID" }
             );
 
             // Seed Cities
@@ -71,7 +72,19 @@ namespace WeatherApp.Infrastructure.Data
                 new City { Id = 22, Name = "Munich", CountryId = 5 },
                 new City { Id = 23, Name = "Hamburg", CountryId = 5 },
                 new City { Id = 24, Name = "Frankfurt", CountryId = 5 },
-                new City { Id = 25, Name = "Cologne", CountryId = 5 }
+                new City { Id = 25, Name = "Cologne", CountryId = 5 },
+                
+                // Indonesia Provinces (Major Cities)
+                new City { Id = 26, Name = "Jakarta", CountryId = 6 },
+                new City { Id = 27, Name = "Surabaya", CountryId = 6 },
+                new City { Id = 28, Name = "Bandung", CountryId = 6 },
+                new City { Id = 29, Name = "Medan", CountryId = 6 },
+                new City { Id = 30, Name = "Makassar", CountryId = 6 },
+                new City { Id = 31, Name = "Semarang", CountryId = 6 },
+                new City { Id = 32, Name = "Palembang", CountryId = 6 },
+                new City { Id = 33, Name = "Tangerang", CountryId = 6 },
+                new City { Id = 34, Name = "Depok", CountryId = 6 },
+                new City { Id = 35, Name = "Yogyakarta", CountryId = 6 }
             );
         }
     }
